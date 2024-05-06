@@ -1,19 +1,17 @@
 import { Injectable, NotFoundException } from '@nestjs/common'
-import { PrismaService } from '../prisma.service'
 import { returnedCtgFields } from '../constants'
-import { hash } from 'argon2'
-import { CategoryDto } from './category.dto'
+import { PrismaService } from '../prisma.service'
 import { generateSlug } from '../utils/generate-slug'
+import { CategoryDto } from './category.dto'
 
 @Injectable()
 export class CategoryService {
-
-	constructor(private readonly prisma: PrismaService) {
-	}
+	constructor(private readonly prisma: PrismaService) {}
 
 	async getCategoryById(id: number) {
 		const category = await this.prisma.category.findUnique({
-			where: { id }, select: returnedCtgFields
+			where: { id: id },
+			select: returnedCtgFields
 		})
 		if (!category) throw new NotFoundException('Category not found')
 
@@ -22,7 +20,8 @@ export class CategoryService {
 
 	async getCategoryBySlug(slug: string) {
 		const category = await this.prisma.category.findUnique({
-			where: { slug }, select: returnedCtgFields
+			where: { slug },
+			select: returnedCtgFields
 		})
 		if (!category) throw new NotFoundException('Category not found')
 
@@ -56,9 +55,9 @@ export class CategoryService {
 		})
 	}
 	async getAllCtg() {
+		console.log('Getting all categories')
 		return await this.prisma.category.findMany({
 			select: returnedCtgFields
 		})
 	}
-
 }

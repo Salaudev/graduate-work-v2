@@ -6,12 +6,8 @@ export const CurrentUser = createParamDecorator(
 		const request = ctx.switchToHttp().getRequest()
 		const user = request.user
 
-		const token = request.headers.authorization?.split(' ')[1];
-
-		console.log(token, 'token');
-		console.log(user, '  user')
+		const token = request.headers.authorization?.split(' ')[1]
 
 		return data ? user[data] : user
 	}
 )
-

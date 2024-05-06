@@ -1,21 +1,25 @@
 import { Module } from '@nestjs/common'
+import { ConfigModule } from '@nestjs/config'
+import { ServeStaticModule } from '@nestjs/serve-static'
+import { path } from 'app-root-path'
 import { AppController } from './app.controller'
 import { AppService } from './app.service'
 import { AuthModule } from './auth/auth.module'
-import { JwtModule } from '@nestjs/jwt'
-import { ConfigModule, ConfigService } from '@nestjs/config'
-import { getJwtConfig } from './config/jwt.config'
+import { CategoryModule } from './category/category.module'
+import { OrderModule } from './order/order.module'
+import { PaginationModule } from './pagination/pagination.module'
 import { PrismaService } from './prisma.service'
-import { UsersModule } from './users/users.module';
-import { ProductModule } from './product/product.module';
-import { ReviewsModule } from './reviews/reviews.module';
-import { CategoryModule } from './category/category.module';
-import { OrderModule } from './order/order.module';
-import { StaticticsModule } from './statictics/statictics.module';
-import { PaginationModule } from './pagination/pagination.module';
+import { ProductModule } from './product/product.module'
+import { ReviewsModule } from './reviews/reviews.module'
+import { StatisticsModule } from './statistics/statistics.module'
+import { UsersModule } from './users/users.module'
 
 @Module({
 	imports: [
+		ServeStaticModule.forRoot({
+			rootPath: `${path}/uploads`,
+			serveRoot: '/uploads'
+		}),
 		ConfigModule.forRoot(),
 		AuthModule,
 		UsersModule,
@@ -23,10 +27,10 @@ import { PaginationModule } from './pagination/pagination.module';
 		ReviewsModule,
 		CategoryModule,
 		OrderModule,
-		StaticticsModule,
-		PaginationModule],
+		StatisticsModule,
+		PaginationModule
+	],
 	controllers: [AppController],
 	providers: [AppService, PrismaService]
 })
-export class AppModule {
-}
+export class AppModule {}

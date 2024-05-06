@@ -1,29 +1,25 @@
 import {
-	Controller,
-	Get,
-	Post,
 	Body,
-	Patch,
-	Param,
+	Controller,
 	Delete,
-	Put,
+	Get,
 	HttpCode,
+	Param,
+	Post,
+	Put,
 	UsePipes,
 	ValidationPipe
 } from '@nestjs/common'
-import { CurrentUser } from '../decorators/current-user.decorator'
 import { Auth } from '../decorators/auth.decorator'
-import { CategoryService } from './category.service'
 import { CategoryDto } from './category.dto'
+import { CategoryService } from './category.service'
 
 @Controller('categories')
 export class CategoryController {
-
-	constructor(private readonly categoryService: CategoryService) {
-	}
+	constructor(private readonly categoryService: CategoryService) {}
 
 	@Get()
-	@Auth()
+	// @Auth()
 	async getAllCategories() {
 		return this.categoryService.getAllCtg()
 	}
@@ -39,30 +35,26 @@ export class CategoryController {
 		return this.categoryService.getCategoryBySlug(slug)
 	}
 
-
 	@Put(':id')
 	@UsePipes(new ValidationPipe())
 	@HttpCode(200)
-	@Auth()
+	@Auth('admin')
 	async updateCategory(@Param('id') id: string, @Body() dto: CategoryDto) {
 		return this.categoryService.updateCategory(+id, dto)
 	}
 
-
-	@Post()
 	@UsePipes(new ValidationPipe())
 	@HttpCode(200)
-	@Auth()
+	@Auth('admin')
+	@Post()
 	async createCategory(@Body() dto: CategoryDto) {
 		return this.categoryService.createCategory()
 	}
 
-
-	@Delete(':id')
+	@Auth('admin')
 	@HttpCode(200)
-	@Auth()
+	@Delete(':id')
 	async deleteCategory(@Param('id') id: string) {
 		return this.categoryService.removeCategory(+id)
 	}
-
 }
